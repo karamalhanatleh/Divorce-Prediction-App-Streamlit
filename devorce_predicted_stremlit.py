@@ -1,19 +1,44 @@
-import streamlit as st
-#import joblib
+import pandas as pd 
 import numpy as np
-import pickle
+import seaborn as sns
+import matplotlib.pyplot as plt
+import streamlit as st
 
+from sklearn.feature_selection import mutual_info_classif
+from sklearn.model_selection import train_test_split,GridSearchCV,KFold,cross_val_score
+
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
+df=pd.read_csv("divorce_data.csv" , delimiter=";")
+
+corr = df.corr()['Divorce'].drop('Divorce')
+sort_corr=corr.abs().sort_values(ascending=False)[:20]
+y = df['Divorce']
+X = df.drop('Divorce',axis=1)
+mutual_info_scores = mutual_info_classif(X, y)
+
+feature_scores_df = pd.DataFrame({'Feature': X.columns, 'Mutual_Info_Score': mutual_info_scores})
+
+# Sort the DataFrame by scores in descending order
+feature_scores_df = feature_scores_df.sort_values(by='Mutual_Info_Score', ascending=False)
+
+best =feature_scores_df['Feature'][:15]
+X_train ,X_test , y_train , y_test = train_test_split(X[best],y , random_state=33,shuffle=True , test_size=0.1)
+
+
+model=LogisticRegression(max_iter=50, penalty='l1', solver='saga')
+model.fit(X_train,y_train)
 
 
 # Add input widgets for user to input feature values
 st.sidebar.header('Enter Information:')
 
 
-# Load the pre-trained model
-#model = joblib.load('logistic_grid_stremlit.pkl')
-model = pickle.load(open('logistic_grid_stremlit.pkl', 'rb'))
 
-   
 # Define the questions
 questions = [
     "1. My spouse and I have similar ideas about how marriage should be",
@@ -38,6 +63,7 @@ st.title("Divorce Prediction App")
 st.text("by Karam Alhanatleh...")
 
 
+
 # Create input fields for user responses
 user_responses = []
 for i, question in enumerate(questions):
@@ -57,4 +83,5 @@ if st.sidebar.button("Predict Divorce"):
 
 # Optionally, provide some additional information or instructions to the user
 st.sidebar.markdown("This app predicts the likelihood of divorce based on your responses to 15 questions.")
+
 

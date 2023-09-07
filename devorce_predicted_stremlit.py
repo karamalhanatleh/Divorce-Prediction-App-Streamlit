@@ -15,11 +15,11 @@ X = df.drop('Divorce',axis=1)
 
 best=['Q18', 'Q20', 'Q40', 'Q17', 'Q16', 'Q11', 'Q19', 'Q9', 'Q25',
        'Q15', 'Q30', 'Q27', 'Q39', 'Q14', 'Q26']
-X_train ,X_test , y_train , y_test = train_test_split(X[best],y , random_state=33,shuffle=True , test_size=0.1)
+#X_train ,X_test , y_train , y_test = train_test_split(X[best],y , random_state=33,shuffle=True , test_size=0.1)
 
 
 model=LogisticRegression(max_iter=50, penalty='l1', solver='saga')
-model.fit(X_train,y_train)
+model.fit(X[best],y)
 
 
 # Add input widgets for user to input feature values

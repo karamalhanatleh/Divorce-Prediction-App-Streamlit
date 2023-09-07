@@ -1,6 +1,7 @@
 import streamlit as st
-import joblib
+#import joblib
 import numpy as np
+import pickle
 
 
 
@@ -9,7 +10,8 @@ st.sidebar.header('Enter Information:')
 
 
 # Load the pre-trained model
-model = joblib.load('logistic_grid_stremlit.pkl')
+#model = joblib.load('logistic_grid_stremlit.pkl')
+model = pickle.load(open('logistic_grid_stremlit.pkl', 'rb'))
 
    
 # Define the questions
@@ -33,7 +35,7 @@ questions = [
 
 # Create a Streamlit web app
 st.title("Divorce Prediction App")
-st.text("by Karam Alhanatleh")
+st.text("by Karam Alhanatleh...")
 
 
 # Create input fields for user responses

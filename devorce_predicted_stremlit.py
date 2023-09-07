@@ -2,29 +2,19 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 
-from sklearn.feature_selection import mutual_info_classif
-from sklearn.model_selection import train_test_split,GridSearchCV,KFold,cross_val_score
-
+from sklearn.model_selection import train_test_split
 
 from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
-from sklearn.ensemble import RandomForestClassifier
 df=pd.read_csv("divorce_data.csv" , delimiter=";")
 
 corr = df.corr()['Divorce'].drop('Divorce')
 sort_corr=corr.abs().sort_values(ascending=False)[:20]
 y = df['Divorce']
 X = df.drop('Divorce',axis=1)
-mutual_info_scores = mutual_info_classif(X, y)
 
-feature_scores_df = pd.DataFrame({'Feature': X.columns, 'Mutual_Info_Score': mutual_info_scores})
 
-# Sort the DataFrame by scores in descending order
-feature_scores_df = feature_scores_df.sort_values(by='Mutual_Info_Score', ascending=False)
-
-best =feature_scores_df['Feature'][:15]
+best=['Q18', 'Q20', 'Q40', 'Q17', 'Q16', 'Q11', 'Q19', 'Q9', 'Q25',
+       'Q15', 'Q30', 'Q27', 'Q39', 'Q14', 'Q26']
 X_train ,X_test , y_train , y_test = train_test_split(X[best],y , random_state=33,shuffle=True , test_size=0.1)
 
 

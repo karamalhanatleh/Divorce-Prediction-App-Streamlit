@@ -2,12 +2,10 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 
-
 from sklearn.linear_model import LogisticRegression
 df=pd.read_csv("divorce_data.csv" , delimiter=";")
 
-corr = df.corr()['Divorce'].drop('Divorce')
-sort_corr=corr.abs().sort_values(ascending=False)[:20]
+
 y = df['Divorce']
 X = df.drop('Divorce',axis=1)
 
